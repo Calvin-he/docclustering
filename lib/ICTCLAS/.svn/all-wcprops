@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS
+END
+user.lic
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/user.lic
+END
+ICTCLAS50.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/ICTCLAS50.h
+END
+libICTCLAS50.a
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/libICTCLAS50.a
+END
+libICTCLAS50.so
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/libICTCLAS50.so
+END
+Configure.xml
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Configure.xml
+END

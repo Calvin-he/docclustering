@@ -1,0 +1,48 @@
+digraph 分裂的层次聚类 {
+	/*size = "6,6";*/
+	//node [color=lightblue2, style=filled];
+	//edge [style=filled];
+	//rankdir=LR
+/*	subgraph c_1 {
+		 style=filled;
+		 color = lightgrey;
+		 edge [color="red", dir=none, style="filled"]; 
+		 "类1" -> "类2" -> "类3";
+		 label="第一次分裂";
+	}
+
+	subgraph c_2 {
+		 style=filled
+		 color = beige
+		 edge [color="green", dir="none", style="filled"]; 
+		 "类11" -> "类12" -> "类2" -> "类31" -> "类32";
+		 label="第二次分裂";
+	}
+
+	subgraph c_3 {
+		 color=bisque
+		 edge [color="blue", dir="none", style="filled"];
+		 "类11" -> "类121" -> "类122" -> "类2" -> "类31" -> "类32";
+		 label="第三次分裂";
+	}
+
+	{rank=same; "类1" "类2" "类3" "第一次分裂"}
+	{rank=same; "类11" "类12" "类31" "类32" "第二次分裂"}
+	{rank=same; "类121" "类122" "第三次分裂"}
+*/	node[group=a, color=lightblue2, style=filled];
+	"第一次分裂" -> "第二次分裂" -> "第三次分裂";
+	
+	node[group="", color=green, style=filled];
+	"初始类" -> "类1";
+	"初始类" -> "类2";
+	"初始类" -> "类3";
+	"类1" -> "类11";
+	"类1" -> "类12";
+	"类3" -> "类31";
+	"类3" -> "类32";
+	"类12"-> "类121";
+	"类12" -> "类122";
+
+
+ 
+}

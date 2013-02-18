@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data
+END
+character.type
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/character.type
+END
+nr.ctx
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/nr.ctx
+END
+ICTPOS.map
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/ICTPOS.map
+END
+FieldDict.pdat
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/FieldDict.pdat
+END
+nr.role
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/nr.role
+END
+character.idx
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/character.idx
+END
+ICTCLAS30.ctx
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/ICTCLAS30.ctx
+END
+GranDict.pdat
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/GranDict.pdat
+END
+PKU_First.map
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/PKU_First.map
+END
+CoreDict.pdat
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/CoreDict.pdat
+END
+BiWord.big
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/BiWord.big
+END
+nr.fsa
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/nr.fsa
+END
+FieldDict.pos
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/FieldDict.pos
+END
+GranDict.pos
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/GranDict.pos
+END
+CoreDict.pos
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/CoreDict.pos
+END
+CoreDict.unig
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/CoreDict.unig
+END
+ICTCLAS_First.map
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/ICTCLAS_First.map
+END
+PKU.map
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/3/trunk/PyICTCLAS/ICTCLAS/Data/PKU.map
+END

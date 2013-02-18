@@ -1,0 +1,2 @@
+NCluster 	Adjusted_Rand 	Adjusted_NMI 	F-Measure  	V-Measure
+1 	-0.000 	0.000 	0.260 	0.000

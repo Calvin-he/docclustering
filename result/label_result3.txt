@@ -1,0 +1,17 @@
+nclusters=5	adj_rand=0.5952	nmi=0.6878	vi=1.1096	split_join=496
+nclusters=10	adj_rand=0.7902	nmi=0.7976	vi=0.8315	split_join=344
+nclusters=11	adj_rand=0.7901	nmi=0.8017	vi=0.8155	split_join=330
+nclusters=11	adj_rand=0.7962	nmi=0.8128	vi=0.7753	split_join=323
+nclusters=12	adj_rand=0.7955	nmi=0.8054	vi=0.8068	split_join=334
+nclusters=11	adj_rand=0.7956	nmi=0.8088	vi=0.7919	split_join=331
+nclusters=9	adj_rand=0.8092	nmi=0.8233	vi=0.7179	split_join=273
+
+46: 局长 美国 彼得雷乌斯 中央 调查局 联邦 奥巴马 情报局 辞职 总统
+279: 美国 飓风 桑迪 纽约 造成 总统 政府 袭击 奥巴马 影响
+68: 枪击 美国 亚利桑那州 议员 众议员 吉福兹 联邦 国会 头部 事件
+112: 美国 利比亚 大使 使馆 领事馆 先知 抗议 电影 伊斯兰教 埃及
+342: 日本 选举 首相 自民党 安倍 大选 民主党 众院 问题 政府
+28: 埃及 医院 总统 穆巴拉克 监狱 状况 人士 开罗 军事 军方
+31: 伊朗 地震 死亡 阿塞拜疆 受伤 村庄 造成 救援 人数 政府
+190: 以色列 加沙 巴勒斯坦 地带 哈马斯 冲突 行动 军事 埃及 停火
+101: 遇难 客机 公司 航空 坠毁 飞机 机场 尼日利亚 空难 事故
