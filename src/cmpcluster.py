@@ -1,5 +1,3 @@
-import wordnet
-import scp
 import dbutils
 
 def load_doc_labels(dbfile):
@@ -14,81 +12,63 @@ def load_topic_keyword(dbpath):
     import sqlite3
     dbcon = sqlite3.connect(dbpath)
     topic_kw = []
-    for r in dbcon.execute('select keyword from topic'):
-        topic_kw.append(frozenset(r[0].split()))
+    for r in dbcon.execute('select keyword,weight from topic'):
+        words = r[0].split()
+        weights = [float(w) for w in r[1].split()]
+        assert len(words)==len(weights)
+        topic_kw.append((words,weights))
     dbcon.close()
     return topic_kw
 
-def compareWordCluster(wclusters, realwclusters):
+def compare_word_cluster(wclusters, realwclusters):
     """(real)wclusters is a sequence of word set """
-    if not wclusters: return (0.0,0.0)
+    if not wclusters: return 0.0
     #print wclusters
     # static precision rate
     prec_list = []
+    
+    #sum_words = sum([len(words) for words in wclusters])
     for wc in wclusters:
-        max_clen = 0
-        for rwc in realwclusters:
-            clen = len(wc & rwc)
-            if clen > max_clen:
-                max_clen = clen
-        prec_list.append(max_clen/float(len(wc)))
-    prec_rate = float(sum(prec_list))/len(prec_list)
-    #statics call rate
-    wset, rcset = set(), set()
-    for wc in wclusters: wset.update(wc)
-    for rwc in realwclusters: rcset.update(rwc)
-    call_rate = len(wset & rcset)/float(len(rcset))
+        max_wmatch,max_nmatch = 0.0,0
+        for rwords,rweight in realwclusters:
+            wmatch,nmatch = 0.0,0
+            for i in xrange(len(rwords)):
+                if rwords[i] in wc:
+                    wmatch += rweight[i]
+                    nmatch += 1
+            if wmatch > max_wmatch:
+                max_wmatch,max_nmatch = wmatch,nmatch
 
-    return (prec_rate,call_rate)
+        prec_list.append(max_wmatch*max_nmatch/len(wc))
+    prec_rate = float(sum(prec_list))/len(realwclusters)
+  
+    return prec_rate
 
-def get_communities_scp(topicfile, graph=None, outfile=None, k=3, min_nodes=10):
-    if graph == None:
-        graph = wordnet.loadTitleWordnet(topicfile, min_coocur=1)
-    coms = scp.communities_scp(graph,k,min_nodes)
-    coms = scp.comuid2name(graph, coms)
-    
-    if outfile != None:
-        f = open(outfile, 'w')
-        for i in range(0,len(coms)):
-            s = str(i+1)+ u":" + u' '.join(coms[i])+'\r\n'
-            f.write(s.encode('gb18030'))
-        f.close()
-    
-    return coms
-    
+def comuid2name(graph, communities):
+    """communities id to name"""
+    com_names = []
+    for com in communities:
+        nameset = set()
+        for nid in com:
+            nameset.add(graph.vs[nid]['name'])
+        com_names.append(nameset)
+    return com_names
 
-def cmp_community_scp(topicfile, graph=None, coms=None, k=3, min_nodes=10):
-    if graph == None:
-        graph = wordnet.loadTitleWordnet(topicfile, min_coocur=1)
-    
-    coms = scp.communities_scp(graph,k,min_nodes)
-    coms = scp.comuid2name(graph, coms)
-    
-    realcoms = load_topic_keyword(topicfile)
-    return compareWordCluster(coms, realcoms)
-
-def test():
-    dbfile = '../data/cn-topic.db'
+def test_title_cluster(dbfile = '../data/sample_test.db'):
     from CommunityBuilder import CommunityBuilder
+    import comdect
     cb = CommunityBuilder(dbfile)
     g = cb.load_title_wordnet(2)
 
-    ks = [3,4,5,6,7]
-    kcomslist = [get_communities_scp(dbfile,g,k=k) for k in ks]
-    print 'sizes of communities:'
-    i = 3
-    for coms in kcomslist:
-        sizes = [len(c) for c in coms]
-        print 'k=%d: %s' % (i, str(sizes)) 
-        i+=1
+    detect = comdect.WalkCommunityDetection(min_nodes=15)
+    coms = detect.detect(g)
+    print len(coms)
+    coms = comuid2name(g,coms)
+    rwclusters = load_topic_keyword(dbfile)
 
-    print 'accurate of communties:'
-    i = 3
-    real_coms = load_topic_keyword(dbfile)
-    for coms in kcomslist:
-        v = compareWordCluster(coms, real_coms)
-        print 'k=%d: %s' % (i, str(v))
-        i+=1
+    purity = compare_word_cluster(coms, rwclusters)
+    print purity
+
 
 
 
@@ -133,7 +113,7 @@ def fmeasure_metrics(predicted, labels):
 
 def purity_metrics(predicted, labels):
     v1 = set(predicted)
-    v2 = set(labeles)
+    v2 = set(labels)
     cp,cl = dict(),dict()
     for v in v1: cp[v] = set()
     for v in v2: cl[v] = set()

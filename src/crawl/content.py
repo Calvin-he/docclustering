@@ -14,7 +14,11 @@ def parse_content(url, title=None):
     if not page:
         print "failed to downlod url '%s'" % (url,)  
         return
-    page = page.decode('gb18030')
+    try:
+        page = page.decode('gb18030')
+    except:
+        print 'warn: failed to decode page: %s' % (url,)
+        return 
     soup = BeautifulSoup(page, 'lxml')
     #remove script and style tags
     for elem in soup.findAll(['script','style']):
@@ -44,6 +48,7 @@ def parse_content(url, title=None):
 def fetch_content(dbcon, save_path):
     cur = dbcon.execute('select rowid,url,title,topic,pub_time from urllist where downloaded=0')
     total,success = 0,0
+    tempfile = os.path.join(save_path,'.temp.txt')
     for r in cur:
         total += 1
         rid, url,title,topic,pub_time = r
@@ -52,13 +57,12 @@ def fetch_content(dbcon, save_path):
 
         filename = dwutil.url2filename(url)
         filepath = os.path.join(dire,filename)
-        tempfile = os.path.join(save_path,'.temp.txt')
-        
-        if os.path.exists(tempfile): 
-            print 'warn: %s exists in Directory %s',(filename,dire)
-        fp = codecs.open(tempfile, encoding='utf-8', mode='w')
+        if os.path.exists(filepath): 
+            print 'warn: %s exists in Directory %s' % (filename,dire)
+
         content_title = parse_content(url, title)
         if content_title:
+            fp = codecs.open(tempfile, encoding='utf-8', mode='w')
             fp.write(content_title[1])
             fp.write(u'\n')
             fp.write(pub_time)

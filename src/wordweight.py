@@ -3,8 +3,8 @@ from worddf import WordDF
 import math,heapq
 
 class WordWeightEvaluation:
-    def __init__(self, kw_num=20):
-        self.worddf = WordDF('r', '../data/worddf')
+    def __init__(self, kw_num=20, worddfdir = '../data/worddf'):
+        self.worddf = WordDF('r', worddfdir)
         self.docsize = self.worddf.doc_size()
         self.kwnum = kw_num
 
@@ -17,18 +17,20 @@ class WordWeightEvaluation:
         如果seg_text为True,说明还没有分过词，需要分词处理
         """
         if seg_text:
-            title = self.seg_text(title)
+            if title:
+                title = self.seg_text(title)
             content = self.seg_text(content)
 
         word_dict = dict()
-        self.__stats_tf(word_dict, title, coef=2.0)
+        if title:
+            self.__stats_tf(word_dict, title, coef=2.0)
         self.__stats_tf(word_dict, content, coef=1.0)
 
-        sum_tf = sum(word_dict.itervalues())
+        #sum_tf = sum(word_dict.itervalues())
         for w,v in word_dict.iteritems():
             df = self.worddf.df(w) + 1.0
             idf = math.log(self.docsize/df, 2)
-            ntf = (v/sum_tf) * idf
+            ntf = v * idf
             word_dict[w] = ntf
         wwlist = heapq.nlargest(self.kwnum, word_dict.iteritems(), key=lambda x:x[1])
         sumw = sum([ww[1] for ww in wwlist])

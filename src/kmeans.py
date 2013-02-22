@@ -55,7 +55,7 @@ def out_result(predicted,k, real_labels):
 def kmeans_cluster_test(data, real_labels, outputfile=None):
     start = time.time()
 
-    ks = range(5,16,1)
+    ks = range(8,15)
     if outputfile != None:
         f = open(outputfile,'w')
         f.write(out_result_header())
@@ -65,7 +65,7 @@ def kmeans_cluster_test(data, real_labels, outputfile=None):
         if outputfile != None:
             f.write(out_result(predicted,k, real_labels))
         
-       
+    f.close()
     elasped = time.time() - start
     print 'Average time: %.3f' % (elasped/float(len(ks)))
 

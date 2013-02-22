@@ -58,8 +58,7 @@ def download_noise(url = 'http://www.qq.com'):
     #os.makedirs(rootdir)
 
     for link, title in get_urllist(url):
-        idx = link.index('/',8)+1
-        fname = link[idx:].replace('/','')  
+        fname = dwutil.url2filename(link)  
         fname = os.path.join(rootdir,fname)
         
         if os.path.exists(fname): continue

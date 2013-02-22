@@ -20,10 +20,10 @@ class CommunityBuilder:
         docs = list(self.iter_document())
         return (twn,docs)
     
-    def build_from_data(self,twn,docs,max_depth=5, min_doc_num=15):
+    def build_from_data(self,twn,docs,max_depth=5, min_doc_num=20):
         starttime = time.time()
         cowordnet = self.build_global_cowordnet(docs)
-        com_dect = comdect.LabelCommunityDetection(min_nodes=20)
+        com_dect = comdect.LabelCommunityDetection(min_nodes=30)
         group = CommunityGroup(cowordnet,docs,com_dect)
         real_labels = None
         if self.logfile:

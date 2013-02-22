@@ -5,14 +5,14 @@ from pyictclas import PyICTCLAS, CodeType, POSMap
 def init_db(db_path):
     print 'initizing database...'
     db_conn = sqlite3.connect(db_path)
-    db_conn.executescript('''create table if not exists document(
+    db_conn.executescript('''create table  document(
  docid integer primary key, 
- title text not null,
+ title text ,
  content text not null,
  kw_title text,
  kw_content text,
  cats text not null,
- pub_time text not null);
+ pub_time text);
 ''')
     return db_conn
 
@@ -27,17 +27,21 @@ def load_stopword(stopwordfile='../data/stopword_cn', encoding='utf-8'):
         stopword_set = frozenset(s.split())
     return stopword_set
 
-def load_topiclist(dbpath, rootdir):
-    dbcon = init_db(dbpath)
+def load_topiclist(db, rootdir):
+    dbcon = db
+    if isinstance(db,basestring):
+        dbcon = init_db(dbcon)
+
     topics = os.listdir(rootdir)
     for tp in topics:
         tp = tp.decode('utf8')
         print 'processing topic: %s' % tp
         files = [os.path.join(rootdir,tp,f) for f  in  os.listdir(os.path.join(rootdir,tp))]
-        prepro_topic(dbcon, tp, files)
-    dbcon.close()
+        load_topic(dbcon, tp, files)
 
-def prepro_topic(db, tp, files):
+    if isinstance(db,basestring): dbcon.close()
+
+def load_topic(db, tp, files,encoding='utf-8'):
     db_con = db
     if isinstance(db,basestring):
         db_con = init_db(db)
@@ -45,13 +49,14 @@ def prepro_topic(db, tp, files):
     ict = load_ictclas()
     cnt = 0
     for filepath in files:
-        fp = codecs.open(filepath,'r','utf-8')
+        fp = codecs.open(filepath,'r',encoding)
         data = fp.readlines()
         fp.close()
         title = seg_text(ict, data[0])
+        title = ' '.join(title)
         pubtime = data[1]
         content = seg_text(ict, ''.join(data[2:]))
-             
+        content = ' '.join(content)
         if title and content:
             db_con.execute('insert into document(title,content,cats,pub_time) values(?,?,?,?)', (title, content, tp, pubtime))
             cnt += 1
@@ -60,6 +65,7 @@ def prepro_topic(db, tp, files):
     if isinstance(db,basestring): db_con.close()
     ict.ictclas_exit()
     return cnt
+
 
 def load_ictclas():
     ict = PyICTCLAS('../lib/ICTCLAS/libICTCLAS50.so')
@@ -79,15 +85,15 @@ def seg_text(ictclas,text):
     text = text.encode('gb18030')
     res = ictclas.ictclas_paragraphProcess(text, CodeType.CODE_TYPE_GB)
     res = res.value.decode('gb18030', 'ignore')
-    wordlist = ''
+    wordlist = []
     for term in res.split():
-        ss = term.split('/')
-        if len(ss) != 2: continue
-        word,pos = ss
+        i = term.find('/')
+        if i < 0: continue
+        word,pos = term[:i],term[i+1:]
         if len(word)<2 or word in stopwords:
             continue
         if pos == 'n' or pos == 'v':
-            wordlist += ' ' + word+'/'+pos
+            wordlist.append(word+'/'+pos)
 
     return wordlist
             

@@ -140,15 +140,16 @@ class Community:
             return ret_coms 
 
 
-    def correlativeValue(self, doc):
+    def correlativeValue(self, doc, only_sim=True):
         sim,asso = 0.0,0.0
         wn = self._wordnet
         com_words = set(iter(doc)) & set(self.name_vertex_map.iterkeys())
         for w in com_words:
             vex = self.name_vertex_map[w]
             sim += vex['weight'] * doc[w]
-            for v2 in vex.neighbors():
-                asso += vex['weight'] * v2['weight'] * wn[vex,v2]
+            if not only_sim:
+                for v2 in vex.neighbors():
+                    asso += vex['weight'] * v2['weight'] * wn[vex,v2]
         if sim == 0: return asso
         x,y=0,0
         for v in self.name_vertex_map.itervalues():

@@ -29,14 +29,17 @@ def get_topiclist(url):
         yield (link,tname,date)
     
 def main():
-    import sys
-    url = sys.argv[1]
-    outfile =sys.argv[2]
-    f = open(outfile, 'w')
-    for x in get_topiclist(url):
-        line = '\t'.join(x).encode('utf8')
-        f.write(line)
-        f.write('\r\n')
+    import argparse,sys
+    parser = argparse.ArgumentParser()
+    parser.add_argument('url', help = 'the url of topic name list page')
+    parser.add_argument('-o', '--outfile', help = 'where to save your topic list')
+    args = parser.parse_args()
+    if args.outfile:
+        f = open(args.outfile, 'w')
+    for x in get_topiclist(args.url):
+        line = '\t'.join(x).encode(sys.getfilesystemencoding())
+        if args.outfile:
+            f.write(line+'\n')
     f.close()
 
 if __name__ == '__main__':

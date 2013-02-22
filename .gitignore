@@ -1,12 +1,8 @@
 *.pyc
 *~
 .ropeproject
-/data/newsgn
-/data/qq-topic
+/data/newsgj
 /data/topicgn
-/data/bak
-/data/noise
-/data/noise.bak
-/data/performance_test
-/data/sample
 /data/topicgj
+/data/alltopicgj
+/data/noise

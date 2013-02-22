@@ -25,7 +25,7 @@ def mean_std(metrics):
 
 def main():
     import preproc_qqtopic
-    import extract_keyword
+    import extract_keyword2
     import worddf
     dbfile = '../data/steady_test.db'
     logsteadyfile = '../result/steady_test.log'
@@ -35,17 +35,13 @@ def main():
      
     if not os.path.exists(dbfile):
         preproc_qqtopic.load_topiclist(dbfile,'../data/topicgj')
-        wdf = worddf.WordDF('c')
-        wdf.add_docs_from_db(dbfile)
-        wdf.close()
 
-        dbcon = extract_keyword.init_db(dbfile)
-        extract_keyword.word_preproc(dbcon)
-        extract_keyword.title_keyword(dbcon)
-        extract_keyword.title_df(dbcon)
-        extract_keyword.content_keyword(dbcon)
-        extract_keyword.topic_keyword(dbcon)
-        dbcon.close()
+        ke = extract_keyword2.DBKeywordExtractor(dbfile)
+        ke.init_db()
+        ke.content_keyword()
+        ke.title_keyword()
+        ke.topic_keyword()
+        ke.close_db()
 
 
     cb = CommunityBuilder(dbfile)

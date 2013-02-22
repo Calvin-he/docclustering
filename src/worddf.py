@@ -20,16 +20,17 @@ class WordDF:
         self.worddb = anydbm.open(self._worddbpath, mode)
         self.filedb = anydbm.open(self._filedbpath, mode)
 
-    def add_docs(self, rootdir):
-        fnm = re.compile(r'^\d+\.htm$') 
+    def add_docs(self, rootdir, encoding='utf-8'):
+        fnm = re.compile(r'\.htm$|\.txt$') 
         for root,dirs,files in os.walk(rootdir):
             print 'scanning dir: ', root
             for f in files:
-                if fnm.match(f):
+                if f.endswith('.htm') or f.endswith('.txt'):
                     fp = os.path.join(root,f)
-                    if not self.__is_processed(fp):
-                        words = self.__stats_word(fp)
-                        self.__add_words(words, fp)
+                    if not self.__is_processed(f):
+                        words = self.__stats_word(fp, encoding)
+                        if len(words)>10:
+                            self.__add_words(words, f)
 
     def add_docs_from_db(self,db):
         if isinstance(db,basestring):
@@ -38,8 +39,9 @@ class WordDF:
 
         for r in dbcon.execute('select docid,title, content from document'):
             wordset = set()
-            for w in r[1].split():
-                wordset.add(w)
+            if r[1]:
+                for w in r[1].split():
+                    wordset.add(w)
             for w in r[2].split():
                 wordset.add(w.split('/')[0])
             self.__add_words(wordset, str(r[0]))
@@ -81,19 +83,28 @@ class WordDF:
     def __is_processed(self, fp):
         return self.filedb.has_key(fp)
 
-    def __stats_word(self, filepath):
+    def __stats_word(self, filepath, encoding):
         if self.ictclas == None:
             self.__load_ictclas()
-        
-        f = codecs.open(filepath,'r','utf-8')
-        text = f.read().encode('gb18030')
+        text = u''
+        try:
+            f = codecs.open(filepath,'r',encoding, errors='strict')
+            text = f.read()
+            f.close()
+        except:
+            f.close()
+        if len(text)<20: return set()
+        text = text.encode('gb18030')
         res = self.ictclas.ictclas_paragraphProcess(text, CodeType.CODE_TYPE_GB)
         words = res.value.decode('gb18030','ignore')
         wordset = set()
         for wt in words.split():
-            s = wt.split('/')
-            if s[1] == 'n' or s[1] == 'v':
-                wordset.add(s[0])
+            i = wt.find('/')
+            if i<0:
+                print 'unexpected word tag', wt
+            word,tag = wt[:i],wt[i+1:]
+            if (tag == 'n' or tag == 'v') and len(word)>=2:
+                wordset.add(word)
         return wordset
 
     def __add_words(self,words,filepath):
@@ -111,9 +122,11 @@ if __name__ == '__main__':
     import argparse
     p = argparse.ArgumentParser()
     p.add_argument('-r', '--resdir', help='which to store th result df', required=True)
+    p.add_argument('-c','--filecoding', help='the file encoding', default='utf-8')
     p.add_argument('indexdir', help='which dir to index words')
+
     args =p.parse_args()
 
-    wdf = WordDF('c', args.resdir)
-    wdf.add_docs(args.indexdir)
+    wdf = WordDF('w', args.resdir)
+    wdf.add_docs(args.indexdir, args.filecoding)
     wdf.close()
